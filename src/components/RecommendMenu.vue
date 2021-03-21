@@ -3,35 +3,63 @@
     <h3>하임스 추천메뉴</h3>
     <div class="item_box">
       <div class="item">
-        <v-img
-        src="@/assets/americano.jpg"
-        class="rounded-circle"
-        width="150"></v-img>
-        <div class="text_box">
-          <h4>아이스 아메리카노</h4>
-        </div>
-      </div>
-      <div class="item">
-        <v-img
-        src="@/assets/americano.jpg"
-        class="rounded-circle"
-        width="150"></v-img>
-        <div class="text_box">
-          <h4>아이스 아메리카노</h4>
-        </div>
-      </div>
-      <div class="item">
-        <v-img
-        src="@/assets/americano.jpg"
-        class="rounded-circle"
-        width="150"></v-img>
-        <div class="text_box">
-          <h4>아이스 아메리카노</h4>
-        </div>
+        <v-fab-transition>
+          <v-btn
+            color=""
+            fab
+            @click="openDialog"
+          >
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </v-fab-transition>
       </div>
     </div>
+    <v-dialog
+      v-model="dialog"
+    >
+      <v-card>
+        <v-app-bar
+          color="red"
+          dark
+        >
+          <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
+          <v-spacer></v-spacer>
+          <v-btn icon>저장</v-btn>
+        </v-app-bar>
+        <v-text-field
+          v-model="recommendMenuTitle"
+          placeholder="메뉴 이름을 입력하세요."
+          class="mr-4 ml-4"
+        >
+        </v-text-field>
+        <v-file-input
+          v-model="recommendMenuImage"
+          placeholder="사진을 선택 해주세요."
+          prepend-icon="mdi-image"
+          class="ml-4 mr-4"
+        >
+        </v-file-input>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+      dialog: false,
+      recommendMenuTitle: '',
+      recommendMenuImage: []
+    }
+  },
+  methods: {
+    openDialog () {
+      this.dialog = true
+    }
+  }
+}
+</script>
 
 <style scoped>
 h3 {
