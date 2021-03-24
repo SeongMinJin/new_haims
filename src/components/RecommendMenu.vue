@@ -2,45 +2,19 @@
   <v-container class="mt-8">
     <h3>하임스 추천메뉴</h3>
     <div class="item_box">
-      <div class="item">
-        <v-fab-transition>
-          <v-btn
-            color=""
-            fab
-            @click="openDialog"
-          >
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </v-fab-transition>
+      <div
+        class="item"
+        v-for="menu in recommendMenu"
+        :key="menu.title"
+      >
+        <v-img
+          :src="menu.subURL"
+          class="rounded-circle"
+          width="100"
+        ></v-img>
+        <h4>{{ menu.title }}</h4>
       </div>
     </div>
-    <v-dialog
-      v-model="dialog"
-    >
-      <v-card>
-        <v-app-bar
-          color="red"
-          dark
-        >
-          <v-btn icon @click="dialog = false"><v-icon>mdi-close</v-icon></v-btn>
-          <v-spacer></v-spacer>
-          <v-btn icon>저장</v-btn>
-        </v-app-bar>
-        <v-text-field
-          v-model="recommendMenuTitle"
-          placeholder="메뉴 이름을 입력하세요."
-          class="mr-4 ml-4"
-        >
-        </v-text-field>
-        <v-file-input
-          v-model="recommendMenuImage"
-          placeholder="사진을 선택 해주세요."
-          prepend-icon="mdi-image"
-          class="ml-4 mr-4"
-        >
-        </v-file-input>
-      </v-card>
-    </v-dialog>
   </v-container>
 </template>
 
@@ -48,14 +22,28 @@
 export default {
   data () {
     return {
-      dialog: false,
-      recommendMenuTitle: '',
-      recommendMenuImage: []
+      recommendMenu: [],
+      menuDialog: false
     }
   },
+  filters: {
+    comma (val) {
+      return String(val).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    }
+  },
+  created () {
+    this.getRecommendMenu()
+  },
   methods: {
-    openDialog () {
-      this.dialog = true
+    getRecommendMenu () {
+      this.$firebase.database().ref('RecommendMenu').on('value', (snapshot) => {
+        this.recommendMenu = snapshot.val()
+      })
+    },
+    openKaKao () {
+      var url = 'https://pf.kakao.com/_xjfxixcK'
+      window.open(url)
+      this.drawer = false
     }
   }
 }
@@ -82,10 +70,10 @@ h3 {
 }
 .item {
   margin: 20px;
-}
-.text_box {
   display: flex;
-  justify-content: center;
-  margin-top: 10px;
+  flex-direction: column;
+}
+.item h4 {
+  text-align: center;
 }
 </style>
